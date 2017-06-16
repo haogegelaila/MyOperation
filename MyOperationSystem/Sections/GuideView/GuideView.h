@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GuideView : UIView
+@interface GuideView : UIView <UIScrollViewDelegate>
+
+@property (nonatomic, strong) UIPageControl *pageControl;
+
++(BOOL)isNeedShow;
 
 @end

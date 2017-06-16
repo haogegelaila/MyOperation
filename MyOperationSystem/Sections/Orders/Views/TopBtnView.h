@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ButtonBottomLine.h"
 
 @interface TopBtnView : UIView
+
+@property (nonatomic, strong) ButtonBottomLine *button;
+
+- (instancetype)initWithFrame:(CGRect)frame withArray:(NSArray *)array;
 
 @end

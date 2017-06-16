@@ -9,5 +9,16 @@
 #ifndef NetWorkDefine_h
 #define NetWorkDefine_h
 
+#define Release_API_MODE 0
 
-#endif /* NetWorkDefine_h */
+//接口模式
+//接口模式
+#        if RELEASE_API_MODE == 0
+#          define BASE_IP @"http://api.mis.dev.gegebox.com"
+#        elif RELEASE_API_MODE == 1
+#          define BASE_IP @"https://mis.gegebox.com"
+#        else
+#        endif
+#endif
+
+

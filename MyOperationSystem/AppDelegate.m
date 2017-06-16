@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "TabBarViewController.h"
+#import "GuideView.h"
+
 
 @interface AppDelegate ()
 
@@ -17,10 +20,73 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //网络状态的监听
+    self.InternetStatus = -1;
+    
+    [self performSelector:@selector(startReachabilityNotification) withObject:nil afterDelay:1];
+    
+    
+    //初始化视图
+    [self creatView];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return YES;
 }
-
-
+#pragma mark -- privateMethod
+- (void)startReachabilityNotification{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    _hostReachability = [Reachability reachabilityForInternetConnection];
+    [_hostReachability startNotifier];
+    
+    //更新网络状态
+    [self udateReachabilityStatus:_hostReachability];
+}
+- (void)udateReachabilityStatus:(Reachability *)reachStatus{
+    
+    /* 网络状态的判断
+     * 0 没有网络连接
+     *
+     *
+     *
+     */
+    NetworkStatus status = [reachStatus currentReachabilityStatus];
+    NSString *newStatus = nil;
+    switch (status) {
+        case NotReachable:
+            
+            newStatus = @"没有网络";
+            [self setInternetStatus:0];
+            break;
+            
+            case ReachableViaWWAN:
+            
+            newStatus = @"移动蜂窝网络连接";
+            [self setInternetStatus:1];
+            
+            break;
+            
+            case ReachableViaWiFi:
+            newStatus = @"WIFI连接";
+            [self setInternetStatus:2];
+            
+        default:
+            break;
+    }
+    if (newStatus) {
+        //显示网络状态的弹框
+        
+    }
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -94,5 +160,42 @@
         abort();
     }
 }
+
+
+
+#pragma mark -- PublicMethod
++ (AppDelegate *)shareInstance
+{
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
++ (AppDelegate *)appDelegate
+{
+    return [[UIApplication sharedApplication] delegate];
+}
+
+
+
+
+#pragma mark -- Private Method
+- (void)creatView{
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    self.window = [[UIWindow alloc]init];
+    [self.window setFrame:bounds];
+    [self.window setBounds:bounds];
+    [self.window setBackgroundColor:[UIColor whiteColor]];
+    [self.window makeKeyAndVisible];
+    //初始化界面
+    TabBarViewController *tabBarVC = [[TabBarViewController alloc]init];
+    self.window.rootViewController = tabBarVC;
+    
+   // 确认下是否显示导航页
+    if ([GuideView isNeedShow]) {
+        [self.window addSubview:[[GuideView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)]];
+    }
+}
+
+
+
 
 @end

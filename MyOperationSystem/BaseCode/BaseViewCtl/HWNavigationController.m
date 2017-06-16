@@ -7,6 +7,7 @@
 //
 
 #import "HWNavigationController.h"
+#import "WHBaseViewController.h"
 
 @interface HWNavigationController ()
 
@@ -19,19 +20,48 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([self.viewControllers containsObject:viewController]) {
+        NSLog(@"不允许push相同viewController");
+        return;
+    }
+    
+    if (![self.topViewController isMemberOfClass:[WHBaseViewController class]] || ![viewController isMemberOfClass:[WHBaseViewController class]]) {
+        [super pushViewController:viewController animated:animated];
+        return;
+    }
+    
+    WHBaseViewController *baseObjc = (WHBaseViewController *)self.topViewController;
+    if (baseObjc.naviAnimating) {
+        NSLog(@"push动画进行中,不允许打断");
+        return;
+    }
+    baseObjc.naviAnimating = YES;
+    [viewController setValue:[NSNumber numberWithBool:YES] forKey:@"naviAnimating"];
+    [super pushViewController:viewController animated:animated];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated
+{
+    if (![self.topViewController isMemberOfClass:[WHBaseViewController class]]) {
+        return [super popViewControllerAnimated:animated];
+    }
+    WHBaseViewController *baseObj = (WHBaseViewController *)self.topViewController;
+    if (baseObj.naviAnimating) {
+        NSLog(@"pop动画进行中,不允许打断");
+        return nil;
+    }
+    baseObj.naviAnimating = YES;
+    return [super popViewControllerAnimated:animated];
 }
-*/
+
+
+
+
+
+
 
 @end

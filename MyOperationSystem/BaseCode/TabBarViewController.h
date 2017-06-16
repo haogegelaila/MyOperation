@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class HWNavigationController;
 
 @interface TabBarViewController : UITabBarController
+
+@property (nonatomic, strong)HWNavigationController *orderNav;
 
 @end

@@ -10,4 +10,9 @@
 
 @interface ButtonBottomLine : UIButton
 
+@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UIView *lineView;
+
+
+- (instancetype)initWithFrame:(CGRect)frame WithTitle:(NSString *)title;
 @end

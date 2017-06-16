@@ -10,4 +10,7 @@
 
 @interface UIButton (HGGExtend)
 
+- (UIButton *)initNavigationButton:(UIImage *)image;
+
+- (UIButton *)initNavigationWithTitle:(NSString *)title color:(UIColor *)color;
 @end
